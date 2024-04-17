@@ -1,19 +1,25 @@
 require('dotenv').config();
 const axios = require('axios');
+const prompts = require('prompts');
 
 const {
     APPID,
-    Q,
     UNITS,
     LANGUAGE,
     URL_BASE,
     URL_BASE2
 } = process.env;
 
-let url = `${URL_BASE}?q=${Q}&appid=${APPID}`;
-
 let latitudeLongitude = async () => {
+    const Q = await prompts({
+        type: 'text',
+        name: 'nome',
+        message: 'Digite o nome da cidade:'
+    });
+
+    let url = `${URL_BASE}?q=${Q.nome}&appid=${APPID}`;
     let res = await axios.get(url);
+
     let latitude = res.data[0].lat;
     let longitude = res.data[0].lon;
     return {latitude, longitude};
